@@ -1,11 +1,11 @@
 import pandas as pd
 import streamlit as st
 import joblib
-from sklearn.preprocessing import LabelEncoder
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
-
+from sklearn.preprocessing import LabelEncoder
+import os
 
 df=pd.read_csv("loan_data.csv")
 
@@ -41,6 +41,11 @@ if st.checkbox("📊 Show Data Visualizations"):
 # Load model, scaler, and encoders
 model = joblib.load("model.pkl")
 scaler = joblib.load("scaler.pkl")
+file_path = "scaler.pkl"
+if os.path.exists(file_path):
+    scaler = joblib.load(file_path)
+else:
+    print(f"Error: {file_path} not found!")
 encoders = joblib.load("encoders.pkl")
 
 st.subheader("Predict whether your loan gets approved or not!!")
@@ -89,5 +94,4 @@ if st.button("Predict"):
 
     st.write(f"**Prediction:** {label}")
     st.write(f"**Confidence:** {proba * 100:.2f}%")
-
 
